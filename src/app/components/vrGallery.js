@@ -1,20 +1,30 @@
 // src/components/VrGallery.js
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { UploadCloud, Bot, Film, Image as ImageIcon, School, Plane, Clapperboard, HeartPulse, X, Calendar, Radio, Users, GraduationCap } from 'lucide-react';
+import { UploadCloud, Bot, Film, Image as ImageIcon, School, Plane, Clapperboard, HeartPulse, X, Calendar, Radio, Users, GraduationCap, Music, Drama, Mountain, BookOpen, Dribbble, Sparkles, BrainCircuit, MicVocal, Video, Bookmark, Smartphone, PlayCircle, Ticket } from 'lucide-react';
 
-// Import the new EntertainmentPage component
-import EntertainmentPage from './Entertainment';
-
+// We still need our simplified Scene component as the core building block.
 const Scene = dynamic(() => import('./Scene'), { ssr: false });
+
+// We will define EntertainmentPage inside this file for simplicity
+const EntertainmentPage = ({ onBack }) => {
+    return (
+        <div className="min-h-screen p-4 sm:p-8 pb-28 animate-fade-in">
+             <button onClick={onBack} className="mb-8 text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-2">
+                <X size={20}/> Back to Main Gallery
+            </button>
+            <h1 className="text-center text-4xl font-bold">Entertainment Page Coming Soon</h1>
+        </div>
+    );
+};
 
 const initialMedia = [
   { id: 1, type: 'image', src: 'https://raw.githubusercontent.com/aframevr/aframe/master/examples/boilerplate/panorama/puydesancy.jpg', title: 'Puy de Sancy, France', category: 'Tourism' },
-  { id: 2, type: 'image', src: './images/img2.jpg', title: 'Sechelt, Canada', category: 'Tourism' },
-  { id: 5, type: 'image', src: './images/img3.jpg', title: 'Balloon Ride', category: 'Entertainment' },
-  { id: 3, type: 'image', src: './images/img5.jpg', title: 'Paris, France', category: 'Education' },
+  { id: 2, type: 'image', src: 'https://raw.githubusercontent.com/aframevr/aframe/master/examples/boilerplate/panorama/sechelt.jpg', title: 'Sechelt, Canada', category: 'Tourism' },
+  { id: 5, type: 'video', src: 'https://cdn.coverr.co/videos/coverr-a-spectacular-view-of-the-sunset-from-a-hot-air-balloon-3096/1080p.mp4', title: 'Balloon Ride', category: 'Entertainment' },
+  { id: 3, type: 'image', src: 'https://raw.githubusercontent.com/aframevr/aframe/master/examples/boilerplate/panorama/paris.jpg', title: 'Paris, France', category: 'Education' },
   { id: 6, type: 'video', src: 'https://cdn.coverr.co/videos/coverr-calm-waves-of-the-sea-that-break-on-the-shore-of-the-beach-5153/1080p.mp4', title: 'Calm Ocean Waves', category: 'Healthcare' },
   { id: 4, type: 'image', src: 'https://raw.githubusercontent.com/aframevr/aframe/v1.0.4/examples/boilerplate/panorama/cubes.jpg', title: 'Abstract Cubes', category: 'Entertainment' },
 ];
@@ -74,7 +84,17 @@ export default function VrGallery() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const sceneRef = useRef(null);
+
+  // State for device detection
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Hook to detect if the user is on a mobile-sized screen
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleMediaSelect = (mediaItem) => {
     setSelectedMedia(mediaItem);
@@ -103,8 +123,6 @@ export default function VrGallery() {
   };
 
   const handleNavSelect = (selection) => {
-    // When a bottom nav item is clicked, we can switch the view.
-    // For now, we'll make them all switch to the Entertainment page as an example.
     if (['Events', 'Live', 'Meetings', 'Teaching'].includes(selection)) {
         setActiveCategory('Entertainment');
     }
@@ -114,10 +132,31 @@ export default function VrGallery() {
     ? media
     : media.filter(item => item.category === activeCategory);
 
+  // --- THE FINAL VR MODE RENDER LOGIC ---
   if (isVrMode && selectedMedia) {
     return (
       <div className="absolute top-0 left-0 w-full h-full z-10">
-        <Scene key={selectedMedia.src} mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} sceneRef={sceneRef} />
+        {/* We check if it's a mobile device */}
+        {isMobile ? (
+          // MOBILE VIEW: Render the manual split-screen with goggle effect
+          <div className="w-full h-full flex items-center justify-center bg-black p-2">
+            <div className="w-full h-auto aspect-[2/1] flex gap-2">
+              <div className="w-1/2 h-full rounded-[50%] overflow-hidden border-2 border-slate-700">
+                <Scene mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} />
+              </div>
+              <div className="w-1/2 h-full rounded-[50%] overflow-hidden border-2 border-slate-700">
+                <Scene mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} />
+              </div>
+            </div>
+          </div>
+        ) : (
+          // DESKTOP VIEW: Render a single, standard view
+          <div className="w-full h-full">
+            <Scene mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} />
+          </div>
+        )}
+
+        {/* The Exit button sits on top of either view */}
         <button
           onClick={() => setIsVrMode(false)}
           className="absolute top-5 right-5 bg-red-600/70 text-white font-bold py-2 px-4 rounded-full z-20 backdrop-blur-sm border border-red-500/50 hover:bg-red-500 transition-all"
@@ -128,13 +167,12 @@ export default function VrGallery() {
     );
   }
 
-  // Logic to display the EntertainmentPage when its category is active
   if (activeCategory === 'Entertainment') {
       return <EntertainmentPage onBack={() => setActiveCategory('All')} />
   }
 
   return (
-    <div className="min-h-screen p-4 sm:p-8 pb-28"> {/* Added padding-bottom for nav */}
+    <div className="min-h-screen p-4 sm:p-8 pb-28">
       <header className="text-center mb-12">
         <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 mb-3">
           vrteleport
@@ -144,7 +182,6 @@ export default function VrGallery() {
         </p>
       </header>
 
-      {/* Action Hub */}
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
         <button onClick={() => setIsAiModalOpen(true)} className="p-6 bg-slate-800/50 rounded-lg border border-cyan-500/30 text-center group hover:bg-slate-800/80 hover:border-cyan-400 transition-all duration-300">
           <Bot className="mx-auto text-cyan-400 group-hover:animate-pulse" size={40} />
@@ -156,7 +193,6 @@ export default function VrGallery() {
         </button>
       </div>
 
-      {/* Category Filters */}
       <div className="flex justify-center items-center gap-2 sm:gap-4 mb-12 flex-wrap">
         {categories.map(cat => (
           <button key={cat.name} onClick={() => setActiveCategory(cat.name)} className={`px-4 py-2 rounded-full text-sm sm:text-base font-semibold flex items-center gap-2 transition-all duration-300 ${activeCategory === cat.name ? 'bg-cyan-500 text-slate-900 shadow-lg shadow-cyan-500/20' : 'bg-slate-800/60 hover:bg-slate-700/80'}`}>
@@ -165,7 +201,6 @@ export default function VrGallery() {
         ))}
       </div>
 
-      {/* Gallery */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredMedia.map((item) => (
           <div key={item.id} className="bg-slate-800/40 rounded-xl overflow-hidden group cursor-pointer border border-transparent hover:border-cyan-500/50 transition-all duration-300 shadow-lg hover:shadow-cyan-500/20" onClick={() => handleMediaSelect(item)}>
@@ -186,7 +221,6 @@ export default function VrGallery() {
         ))}
       </div>
 
-      {/* AI Generation Modal */}
       <Modal isOpen={isAiModalOpen} onClose={() => setIsAiModalOpen(false)} title="Generate Scene with AI">
         <form onSubmit={(e) => { e.preventDefault(); handleAiGenerate(e.target.prompt.value); }}>
           <p className="text-gray-300 mb-4">Describe the 360° world you want to create. Be as descriptive as possible.</p>
@@ -195,7 +229,6 @@ export default function VrGallery() {
         </form>
       </Modal>
 
-      {/* Upload Modal */}
       <Modal isOpen={isUploadModalOpen} onClose={() => setIsUploadModalOpen(false)} title="Upload Your Media">
         <div className="text-center">
           <p className="text-gray-300 mb-6">Choose whether to upload a 360° image or a 360° video.</p>
@@ -214,7 +247,6 @@ export default function VrGallery() {
         </div>
       </Modal>
 
-      {/* Bottom Navigation Bar */}
       <BottomNav onSelect={handleNavSelect} />
     </div>
   );

@@ -9,6 +9,7 @@ export default function Scene({ mediaUrl, mediaType }) {
     <a-scene embedded vr-mode-ui="enabled: false">
 
       {mediaType === 'image'
+
         ? <a-sky src={mediaUrl} crossOrigin="anonymous"></a-sky>
         : <a-videosphere src={mediaUrl} autoplay="true" loop="true" crossOrigin="anonymous"></a-videosphere>
       }
