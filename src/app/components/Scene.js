@@ -2,54 +2,49 @@
 'use client';
 
 import 'aframe';
-import { Entity, Scene as AFrameScene } from 'aframe-react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+
+// This is a more robust implementation that directly interacts with A-Frame's core library
+// to ensure the VR button and scene are always correctly initialized.
+export default function Scene({ mediaUrl, mediaType }) {
+  const sceneRef = useRef(null);
+
+  useEffect(() => {
+    const sceneEl = sceneRef.current;
+    if (!sceneEl) return;
+
+    // Create the media element (sky or videosphere) using vanilla JavaScript
+    const mediaEl = document.createElement(mediaType === 'image' ? 'a-sky' : 'a-videosphere');
+
+    // Set the source attribute for the media
+    mediaEl.setAttribute('src', mediaUrl);
+
+    // For videos, add autoplay and loop attributes
+    if (mediaType === 'video') {
+      mediaEl.setAttribute('autoplay', 'true');
+      mediaEl.setAttribute('loop', 'true');
+    }
 
 
+    const existingMedia = sceneEl.querySelector('a-sky, a-videosphere');
+    if (existingMedia) {
+      sceneEl.removeChild(existingMedia);
+    }
 
-const Scene = ({ imageUrl, mediaType }) => {
+
+    sceneEl.appendChild(mediaEl);
+
+    sceneEl.setAttribute('vr-mode-ui', { enabled: true });
+
+  }, [mediaUrl, mediaType]);
 
   return (
-    <AFrameScene embedded>
-      {mediaType === 'image' ? (
-        // Use <a-sky> for 360-degree images
-        <Entity primitive="a-sky" src={imageUrl} />
-      ) : (
 
-        <Entity primitive="a-videosphere" src={imageUrl} play-on-click />
-      )}
-
-
-      <Entity primitive="a-camera">
-        <Entity primitive="a-cursor" />
-      </Entity>
-    </AFrameScene>
+    <a-scene ref={sceneRef} embedded>
+     
+      <a-camera>
+        <a-cursor></a-cursor>
+      </a-camera>
+    </a-scene>
   );
-};
-
-
-const PlayOnClick = {
-  schema: {},
-  init: function () {
-    this.el.sceneEl.addEventListener('click', () => {
-      if (this.el.components.material && this.el.components.material.material.map) {
-        const videoEl = this.el.components.material.material.map.image;
-        if (videoEl.paused) {
-          videoEl.play();
-        } else {
-          videoEl.pause();
-        }
-      }
-    });
-  }
-};
-
-
-if (typeof window !== 'undefined' && window.AFRAME) {
-  if (!window.AFRAME.components['play-on-click']) {
-    window.AFRAME.registerComponent('play-on-click', PlayOnClick);
-  }
 }
-
-
-export default Scene;

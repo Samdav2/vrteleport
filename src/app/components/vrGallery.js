@@ -117,7 +117,7 @@ export default function VrGallery() {
   if (isVrMode && selectedMedia) {
     return (
       <div className="absolute top-0 left-0 w-full h-full z-10">
-        <Scene key={selectedMedia.src} imageUrl={selectedMedia.src} mediaType={selectedMedia.type} sceneRef={sceneRef} />
+        <Scene key={selectedMedia.src} mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} sceneRef={sceneRef} />
         <button
           onClick={() => setIsVrMode(false)}
           className="absolute top-5 right-5 bg-red-600/70 text-white font-bold py-2 px-4 rounded-full z-20 backdrop-blur-sm border border-red-500/50 hover:bg-red-500 transition-all"
