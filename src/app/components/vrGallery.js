@@ -15,8 +15,14 @@ const initialMedia = [
   { id: 2, type: 'image', src: './images/img2.jpg', title: 'Sechelt, Canada', category: 'Tourism' },
   { id: 5, type: 'image', src: './images/img3.jpg', title: 'Balloon Ride', category: 'Entertainment' },
   { id: 3, type: 'image', src: './images/img5.jpg', title: 'Paris, France', category: 'Education' },
-  { id: 6, type: 'video', src: 'https://cdn.coverr.co/videos/coverr-calm-waves-of-the-sea-that-break-on-the-shore-of-the-beach-5153/1080p.mp4', title: 'Calm Ocean Waves', category: 'Healthcare' },
-  { id: 4, type: 'image', src: 'https://raw.githubusercontent.com/aframevr/aframe/v1.0.4/examples/boilerplate/panorama/cubes.jpg', title: 'Abstract Cubes', category: 'Entertainment' },
+  { id: 6, type: 'video', src: 'https://cdn.eso.org/images/publicationjpg/2016_04_09_ALMA_Central_Array_Reproj-CC.jpg', title: 'Night over Chajnantor', category: 'Education' },
+  { id: 4, type: 'image', src: 'https://cdn.eso.org/images/publicationjpg/vlt-mw-potw.jpg', title: 'Southern Sky', category: 'Education' },
+  { id: 4, type: 'image', src: 'https://cdn.eso.org/images/publicationjpg/mmb-coatn-tank-pano2.jpg', title: 'Inside the MMB at Paranal', category: 'Education' },
+  { id: 4, type: 'video', src: './videos/video1.mp4', title: 'Milky Way', category: 'Education' },
+  { id: 4, type: 'image', src: './images/img7.jpg', title: ' Dust (red), gas (green) and stars (blue)', category: 'Education' },
+  { id: 4, type: 'image', src: 'https://cdn.eso.org/images/publicationjpg/potw1105a.jpg', title: 'Alien World', category: 'Education' },
+  { id: 4, type: 'image', src: './images/img8.jpg', title: 'LASU Innovation Hub', category: 'Education' },
+
 ];
 
 const categories = [

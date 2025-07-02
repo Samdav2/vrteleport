@@ -6,7 +6,7 @@ import { Radio, Calendar, Ticket, Bookmark, X, PlayCircle, Star, Film, Mic, Game
 // --- Sample Data for All Categories ---
 
 const liveEvents = [
-  { id: 'live-1', title: 'Afrobeats Global Fest', artist: 'Wizkid & Friends', time: 'Live Now', image: 'https://images.unsplash.com/photo-1594212699903-ec8a34974d7c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', description: 'Experience the biggest names in Afrobeats performing live from Eko Atlantic. A global celebration of music and culture you can\'t miss.' },
+  { id: 'live-1', title: 'LASU Innvation Hub OPen Day', artist: 'Don', time: 'Live Now', image: 'https://static.wixstatic.com/media/b672a6_b26f9ef5200546f9b3434bd949033f52~mv2.jpg/v1/fill/w_1905,h_829,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b672a6_b26f9ef5200546f9b3434bd949033f52~mv2.jpg', description: 'Come and watch how young lasu tech innovators tend to chnage teh world with thier ideas' },
   { id: 'live-2', title: 'Nollywood Premiere: "Cyber City"', artist: 'Funke Akindele', time: 'Starts in 30 Mins', image: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', description: 'Be the first to see the new blockbuster sci-fi thriller. Join the cast and crew for the exclusive virtual red carpet and screening.' },
 ];
 
