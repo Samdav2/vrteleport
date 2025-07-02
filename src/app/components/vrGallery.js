@@ -85,10 +85,8 @@ export default function VrGallery() {
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
-  // State for device detection
   const [isMobile, setIsMobile] = useState(false);
 
-  // Hook to detect if the user is on a mobile-sized screen
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -136,27 +134,26 @@ export default function VrGallery() {
   if (isVrMode && selectedMedia) {
     return (
       <div className="absolute top-0 left-0 w-full h-full z-10">
-        {/* We check if it's a mobile device */}
         {isMobile ? (
-          // MOBILE VIEW: Render the manual split-screen with goggle effect
-          <div className="w-full h-full flex items-center justify-center bg-black p-2">
-            <div className="w-full h-auto aspect-[2/1] flex gap-2">
-              <div className="w-1/2 h-full rounded-[50%] overflow-hidden border-2 border-slate-700">
-                <Scene mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} />
-              </div>
-              <div className="w-1/2 h-full rounded-[50%] overflow-hidden border-2 border-slate-700">
-                <Scene mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} />
-              </div>
+          // MOBILE VIEW: A robust flexbox layout that works in portrait and landscape.
+          // The glass mimicry styles have been removed.
+          <div className="w-full h-full flex bg-black">
+            {/* Left Eye View Container */}
+            <div className="w-1/2 h-full">
+              <Scene key={`left-${selectedMedia.src}`} mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} />
+            </div>
+            {/* Right Eye View Container */}
+            <div className="w-1/2 h-full">
+              <Scene key={`right-${selectedMedia.src}`} mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} />
             </div>
           </div>
         ) : (
-          // DESKTOP VIEW: Render a single, standard view
+          // DESKTOP VIEW: A single, standard view.
           <div className="w-full h-full">
             <Scene mediaUrl={selectedMedia.src} mediaType={selectedMedia.type} />
           </div>
         )}
 
-        {/* The Exit button sits on top of either view */}
         <button
           onClick={() => setIsVrMode(false)}
           className="absolute top-5 right-5 bg-red-600/70 text-white font-bold py-2 px-4 rounded-full z-20 backdrop-blur-sm border border-red-500/50 hover:bg-red-500 transition-all"
