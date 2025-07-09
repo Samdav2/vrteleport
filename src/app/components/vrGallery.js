@@ -22,6 +22,10 @@ const initialMedia = [
   { id: 4, type: 'image', src: './images/img7.jpg', title: ' Dust (red), gas (green) and stars (blue)', category: 'Education' },
   { id: 4, type: 'image', src: 'https://cdn.eso.org/images/publicationjpg/potw1105a.jpg', title: 'Alien World', category: 'Education' },
   { id: 4, type: 'image', src: './images/img8.jpg', title: 'LASU Innovation Hub', category: 'Education' },
+  { id: 4, type: 'image', src: './images/img9.jpg', title: 'Dormitories panorama at ALMA OSF', category: 'Education' },
+  { id: 4, type: 'image', src: './images/img10.jpg', title: 'Sun, Moon and telescopes above the desert', category: 'Education' },
+  { id: 4, type: 'image', src: './images/img11.jpg', title: 'Sun, Moon and telescopes above the desert', category: 'Education' },
+  { id: 4, type: 'image', src: './images/img12.jpg', title: 'The Solar System', category: 'Education' },
 
 ];
 
